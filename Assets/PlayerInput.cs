@@ -5,15 +5,16 @@ public class PlayerInput : MonoBehaviour
     public Player player;
     public Transform cameraTransform;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+    
     }
 
-    // Update is called once per frame
     void Update()
     {
+
         Vector3 movement = Vector3.zero;
 
         Vector3 cameraForward = cameraTransform.forward;
@@ -37,6 +38,14 @@ public class PlayerInput : MonoBehaviour
 
         if(Input.GetKey(KeyCode.D)){
             movement += cameraRight;
+        }
+
+        if(Input.GetKeyDown(KeyCode.Space)) {
+            player.Jump();
+        }
+
+        if(Input.GetKeyDown(KeyCode.Mouse0)) {
+            player.Shoot();
         }
 
         movement.Normalize();
