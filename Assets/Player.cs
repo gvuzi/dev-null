@@ -5,6 +5,8 @@ using System.Collections;
 public class Player : MonoBehaviour
 {
     public Camera firstPersonCamera;
+    public LayerMask terrain;
+    public Transform groundCheckTransform;
 
     [Header("Movement")]
     CharacterController characterController;
@@ -39,9 +41,14 @@ public class Player : MonoBehaviour
     }
 
     public void Jump() {
-        if(characterController.isGrounded) {
+        if(PlayerOnGround()) {
             gravityVelocity.y = jumpSpeed;
         }
+        return;
+    }
+
+    public bool PlayerOnGround() {
+        return Physics.OverlapSphere(groundCheckTransform.position,0.5f,terrain).Length > 0;
     }
 
     public void ApplyGravity() {
