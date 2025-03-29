@@ -20,6 +20,7 @@ public class Player : MonoBehaviour
     public float bulletSpeed = 45f;
     public float shootTime = 1f;
     public Transform startPoint;
+   
 
     void Awake() {
         characterController = GetComponent<CharacterController>();
@@ -27,7 +28,7 @@ public class Player : MonoBehaviour
 
     void Start()
     {
-        
+
     }
 
     void Update()
@@ -87,6 +88,7 @@ public class Player : MonoBehaviour
             yield return null;
         }
         bullet.transform.position = endPoint;
+        Destroy(bullet, 1f);
         yield return null;
     }
 
