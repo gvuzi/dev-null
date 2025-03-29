@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 
 public class StationaryEnemy : MonoBehaviour
@@ -13,6 +14,7 @@ public class StationaryEnemy : MonoBehaviour
     public float shootTime = 1f;
     public float shootCooldown = 2f;
     public Transform startPoint;
+    private List<GameObject> bullets = new List<GameObject>();
 
     // velocity variables
     Vector3 playerVelocity;
@@ -32,18 +34,18 @@ public class StationaryEnemy : MonoBehaviour
         playerVelocity = (playerCurrentPosition - playerLastPosition) / Time.deltaTime;
         playerLastPosition = playerCurrentPosition;
         
+        transform.LookAt(player.position);
     }
 
     void Shoot() {
         if(Vector3.Distance(enemy.transform.position, player.transform.position) > 20) {
             return;
         }
-
-        transform.LookAt(player.position);
-
        
         Vector3 endPoint = CalculateEndPoint();
         GameObject bullet = Instantiate(bulletPrefab, startPoint.position, Quaternion.identity);
+
+        bullets.Add(bullet);
         StartCoroutine(ShootRoutine(bullet, endPoint));
         
     }
@@ -78,16 +80,29 @@ public class StationaryEnemy : MonoBehaviour
             bullet.transform.position = Vector3.Lerp(startPoint.position,endPoint,t/shootTime);
             yield return null;
         }
+
+       
+        
         Destroy(bullet, 1f);
+        yield return new WaitForSeconds(1f);
+        bullets.Remove(bullet);
  
         yield return null;
     }
 
+    void DestroyBullets() {
+        for(int i = 0; i < bullets.Count; i++) {
+            Destroy(bullets[i]);
+        }
+        bullets.Clear();
+    }
 
     void OnTriggerEnter(Collider other) {
         if(other.CompareTag("Bullet")) {
             Destroy(other.gameObject);
+            DestroyBullets();
             Destroy(this.gameObject);
         }
     }
+
 }

@@ -40,7 +40,7 @@ public class PlayerInput : MonoBehaviour
             movement += cameraRight;
         }
 
-        if(Input.GetKeyDown(KeyCode.Space)) {
+        if(Input.GetKeyDown(KeyCode.Space) || Input.GetAxis("Mouse ScrollWheel") > 0f) {
             player.Jump();
         }
 

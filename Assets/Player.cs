@@ -97,5 +97,9 @@ public class Player : MonoBehaviour
         if(other.CompareTag("Chair")) {
             SceneManager.LoadScene("First-Mission");
         }
+        if(other.CompareTag("EnemyBullet")) {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
     }
+
 }
