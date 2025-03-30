@@ -19,7 +19,15 @@ public class Player : MonoBehaviour
     public GameObject bulletPrefab;
     public float bulletSpeed = 45f;
     public float shootTime = 1f;
+    public float shootCooldown = 0.5f;
+    private bool canShoot = true;
     public Transform startPoint;
+
+    [Header("Health")]
+    private float maxHealth = 100f;
+    private float currentHealth;
+    private float damage = 25f;
+    public Healthbar healthbar;
    
 
     void Awake() {
@@ -28,7 +36,8 @@ public class Player : MonoBehaviour
 
     void Start()
     {
-
+        currentHealth = maxHealth;
+        healthbar.UpdateHealth(maxHealth, currentHealth);
     }
 
     void Update()
@@ -62,6 +71,9 @@ public class Player : MonoBehaviour
     }
 
     public void Shoot(){
+
+        if (!canShoot) return;
+
         Ray ray = firstPersonCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0)); //middle of screen (crosshair)
         RaycastHit hit;
 
@@ -75,8 +87,14 @@ public class Player : MonoBehaviour
 
         GameObject bullet = Instantiate(bulletPrefab, startPoint.position, Quaternion.identity);
         StartCoroutine(ShootRoutine(bullet, endPoint));
+        StartCoroutine(ShootingCooldown());
     }
 
+    IEnumerator ShootingCooldown() {
+        canShoot = false;
+        yield return new WaitForSeconds(shootCooldown);
+        canShoot = true;
+    }
     IEnumerator ShootRoutine(GameObject bullet, Vector3 endPoint) {
         float distance = Vector3.Distance(startPoint.position, endPoint);
         float shootTime = distance / bulletSpeed;
@@ -87,18 +105,23 @@ public class Player : MonoBehaviour
             bullet.transform.position = Vector3.Lerp(startPoint.position,endPoint,t/shootTime);
             yield return null;
         }
+      
         bullet.transform.position = endPoint;
-        Destroy(bullet, 1f);
-        yield return null;
+    
+            Destroy(bullet);
+        
     }
 
 
     void OnTriggerEnter(Collider other) {
-        if(other.CompareTag("Chair")) {
-            SceneManager.LoadScene("First-Mission");
-        }
         if(other.CompareTag("EnemyBullet")) {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            currentHealth -= damage;
+            healthbar.UpdateHealth(maxHealth, currentHealth); 
+
+            if (currentHealth <= 0) {
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            } 
+
         }
     }
 

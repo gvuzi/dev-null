@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 public class StationaryEnemy : MonoBehaviour
 {
-    public Transform player;
+    public Player player;
     public Transform enemy;
 
     [Header("Bullets")]
@@ -15,6 +15,7 @@ public class StationaryEnemy : MonoBehaviour
     public float shootCooldown = 2f;
     public Transform startPoint;
     private List<GameObject> bullets = new List<GameObject>();
+    
 
     // velocity variables
     Vector3 playerVelocity;
@@ -23,18 +24,18 @@ public class StationaryEnemy : MonoBehaviour
    
     void Start()
     {
-        playerLastPosition = player.position;
+        playerLastPosition = player.transform.position;
         InvokeRepeating("Shoot", 0f, shootCooldown);
     }
 
     void Update()
     {
         //calculate player's velocity
-        playerCurrentPosition = player.position;
+        playerCurrentPosition = player.transform.position;
         playerVelocity = (playerCurrentPosition - playerLastPosition) / Time.deltaTime;
         playerLastPosition = playerCurrentPosition;
         
-        transform.LookAt(player.position);
+        transform.LookAt(player.transform.position);
     }
 
     void Shoot() {
@@ -47,18 +48,17 @@ public class StationaryEnemy : MonoBehaviour
 
         bullets.Add(bullet);
         StartCoroutine(ShootRoutine(bullet, endPoint));
-        
     }
 
     Vector3 CalculateEndPoint() {
         // calculate distance from spawn point to player
-        float distance = Vector3.Distance(startPoint.position, player.position);
+        float distance = Vector3.Distance(startPoint.position, player.transform.position);
 
         // calculate bullet fly time, time it takes to reach player's pos
         float bulletFlyTime = distance / bulletSpeed;
 
         // calculates end point (where player will be)
-        Vector3 endPoint = player.position + (playerVelocity * bulletFlyTime);
+        Vector3 endPoint = player.transform.position + (playerVelocity * bulletFlyTime);
 
         // extend bullet path past the player
         float extendedDistance = 70f;
@@ -68,12 +68,10 @@ public class StationaryEnemy : MonoBehaviour
     }
 
     IEnumerator ShootRoutine(GameObject bullet, Vector3 endPoint) {
-       
         float distance = Vector3.Distance(startPoint.position, endPoint);
         float shootTime = distance / bulletSpeed;
 
         float t = 0;
-
 
         while(t < shootTime) {
             t += Time.deltaTime;
@@ -81,12 +79,7 @@ public class StationaryEnemy : MonoBehaviour
             yield return null;
         }
 
-       
-        
         Destroy(bullet, 1f);
-        yield return new WaitForSeconds(1f);
-        bullets.Remove(bullet);
- 
         yield return null;
     }
 
@@ -99,7 +92,6 @@ public class StationaryEnemy : MonoBehaviour
 
     void OnTriggerEnter(Collider other) {
         if(other.CompareTag("Bullet")) {
-            Destroy(other.gameObject);
             DestroyBullets();
             Destroy(this.gameObject);
         }

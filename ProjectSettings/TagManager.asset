@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Chair
   - Bullet
+  - EnemyBullet
   layers:
   - Default
   - TransparentFX

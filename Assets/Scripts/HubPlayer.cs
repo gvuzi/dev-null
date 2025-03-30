@@ -1,20 +1,19 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class PlayerInput : MonoBehaviour
+public class HubPlayer : MonoBehaviour
 {
-    public Player player;
     public Transform cameraTransform;
+    public float speed = 5f;
+    CharacterController characterController;
 
-    void Start()
-    {
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-    
+    void Awake() {
+        characterController = GetComponent<CharacterController>();
     }
 
+    
     void Update()
     {
-
         Vector3 movement = Vector3.zero;
 
         Vector3 cameraForward = cameraTransform.forward;
@@ -40,15 +39,18 @@ public class PlayerInput : MonoBehaviour
             movement += cameraRight;
         }
 
-        if(Input.GetKeyDown(KeyCode.Space) || Input.GetAxis("Mouse ScrollWheel") > 0f) {
-            player.Jump();
-        }
-
-        if(Input.GetKeyDown(KeyCode.Mouse0)) {
-            player.Shoot();
-        }
-
         movement.Normalize();
-        player.Move(movement);
+        Move(movement);
+    }
+
+    public void Move(Vector3 direction) {
+        characterController.Move(direction * speed * Time.deltaTime);
+        transform.LookAt(transform.position + direction);
+    }
+
+    void OnTriggerEnter(Collider other) {
+        if(other.CompareTag("Chair")) {
+            SceneManager.LoadScene("First-Mission");
+        }
     }
 }
