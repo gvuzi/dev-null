@@ -78,8 +78,13 @@ public class Player : MonoBehaviour
 
         Vector3 endPoint;
         if (Physics.Raycast(ray, out hit)) {
-            endPoint = hit.point;
-        }
+            if (hit.collider.CompareTag("Enemy")) {
+                endPoint = hit.point + ray.direction * 1f; // extend the ray for hit detection 
+            }
+            else {
+                endPoint = hit.point;
+            }
+        } 
         else {
             endPoint = ray.GetPoint(70);
         }
@@ -124,6 +129,10 @@ public class Player : MonoBehaviour
 
         if (other.CompareTag("Spike")) {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+
+        if (other.CompareTag("DataFragment")) {
+            Destroy(other.gameObject);
         }
     }
 

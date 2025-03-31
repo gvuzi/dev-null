@@ -8,6 +8,8 @@ TagManager:
   - Bullet
   - EnemyBullet
   - Spike
+  - DataFragment
+  - Enemy
   layers:
   - Default
   - TransparentFX

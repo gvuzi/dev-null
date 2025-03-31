@@ -43,9 +43,23 @@ public class StationaryEnemy : MonoBehaviour
             return;
         }
        
-        Vector3 endPoint = CalculateEndPoint();
-        GameObject bullet = Instantiate(bulletPrefab, startPoint.position, Quaternion.identity);
+        Ray ray = new Ray(startPoint.position, (player.transform.position - startPoint.position).normalized);
+        RaycastHit hit;
 
+        Vector3 endPoint;
+        if (Physics.Raycast(ray, out hit)) {
+            if (hit.collider.CompareTag("Player")) {
+                endPoint = CalculateEndPoint(); 
+            }
+            else {
+                endPoint = hit.point;
+            }
+        } 
+        else {
+            endPoint = ray.GetPoint(70);
+        }
+
+        GameObject bullet = Instantiate(bulletPrefab, startPoint.position, Quaternion.identity);
         bullets.Add(bullet);
         StartCoroutine(ShootRoutine(bullet, endPoint));
     }
@@ -79,7 +93,7 @@ public class StationaryEnemy : MonoBehaviour
             yield return null;
         }
 
-        Destroy(bullet, 1f);
+        Destroy(bullet);
         yield return null;
     }
 
