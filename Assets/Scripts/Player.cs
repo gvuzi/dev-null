@@ -133,6 +133,8 @@ public class Player : MonoBehaviour
 
         if (other.CompareTag("DataFragment")) {
             Destroy(other.gameObject);
+            currentHealth = 100f;
+            healthbar.UpdateHealth(maxHealth, currentHealth); 
         }
     }
 
