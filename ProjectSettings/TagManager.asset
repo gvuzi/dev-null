@@ -7,6 +7,7 @@ TagManager:
   - Chair
   - Bullet
   - EnemyBullet
+  - Spike
   layers:
   - Default
   - TransparentFX
@@ -15,7 +16,7 @@ TagManager:
   - Water
   - UI
   - Terrain
-  - 
+  - Weapons
   - 
   - 
   - 

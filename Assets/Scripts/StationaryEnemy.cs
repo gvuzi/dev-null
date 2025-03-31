@@ -92,8 +92,8 @@ public class StationaryEnemy : MonoBehaviour
 
     void OnTriggerEnter(Collider other) {
         if(other.CompareTag("Bullet")) {
-            DestroyBullets();
             Destroy(this.gameObject);
+            DestroyBullets();
         }
     }
 

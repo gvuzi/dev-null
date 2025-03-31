@@ -71,7 +71,6 @@ public class Player : MonoBehaviour
     }
 
     public void Shoot(){
-
         if (!canShoot) return;
 
         Ray ray = firstPersonCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0)); //middle of screen (crosshair)
@@ -118,10 +117,13 @@ public class Player : MonoBehaviour
             currentHealth -= damage;
             healthbar.UpdateHealth(maxHealth, currentHealth); 
 
-            if (currentHealth <= 0) {
+        if (currentHealth <= 0) {
                 SceneManager.LoadScene(SceneManager.GetActiveScene().name);
             } 
+        }
 
+        if (other.CompareTag("Spike")) {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
     }
 
