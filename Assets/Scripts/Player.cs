@@ -28,6 +28,9 @@ public class Player : MonoBehaviour
     private float currentHealth;
     private float damage = 25f;
     public Healthbar healthbar;
+
+    [Header("Mechanics")]
+    public float dataFragmentsCollected = 0;
    
 
     void Awake() {
@@ -127,14 +130,21 @@ public class Player : MonoBehaviour
             } 
         }
 
-        if (other.CompareTag("Spike")) {
+        if (other.CompareTag("Spike") || other.CompareTag("Enemy")) {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
 
         if (other.CompareTag("DataFragment")) {
             Destroy(other.gameObject);
+            dataFragmentsCollected++;
             currentHealth = 100f;
             healthbar.UpdateHealth(maxHealth, currentHealth); 
+        }
+
+        if (other.CompareTag("Door")) {
+            if (dataFragmentsCollected == 3) {
+                Destroy(other.gameObject);
+            }
         }
     }
 
