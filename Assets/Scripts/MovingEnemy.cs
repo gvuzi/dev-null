@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class MovingEnemy : MonoBehaviour
 {
-    public Transform player; 
+    public Player player; 
     public float followSpeed = 3f; 
     public float followRange = 15f;
 
@@ -17,7 +17,7 @@ public class MovingEnemy : MonoBehaviour
             return;
         }
 
-        Vector3 direction = player.position - transform.position;
+        Vector3 direction = player.transform.position - transform.position;
         direction.Normalize();
         
         transform.LookAt(player.transform);
@@ -26,6 +26,7 @@ public class MovingEnemy : MonoBehaviour
 
     void OnTriggerEnter(Collider other) {
         if(other.CompareTag("Bullet")) {
+            player.HitSound();
             Destroy(this.gameObject);
         }
     }

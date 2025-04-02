@@ -106,6 +106,7 @@ public class StationaryEnemy : MonoBehaviour
 
     void OnTriggerEnter(Collider other) {
         if(other.CompareTag("Bullet")) {
+            player.HitSound();
             Destroy(this.gameObject);
             DestroyBullets();
         }

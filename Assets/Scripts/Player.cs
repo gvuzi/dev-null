@@ -31,6 +31,11 @@ public class Player : MonoBehaviour
 
     [Header("Mechanics")]
     public float dataFragmentsCollected = 0;
+
+    [Header("Audio")]
+    public AudioSource audioSource;
+    public AudioClip hitSound;
+    public AudioClip damageSound;
    
 
     void Awake() {
@@ -119,16 +124,23 @@ public class Player : MonoBehaviour
         
     }
 
+    public void HitSound() {
+        audioSource.resource = hitSound;
+        audioSource.Play();
+    }
 
     void OnTriggerEnter(Collider other) {
         if(other.CompareTag("EnemyBullet")) {
+            audioSource.resource = damageSound;
+            audioSource.Play();
             currentHealth -= damage;
             healthbar.UpdateHealth(maxHealth, currentHealth); 
-
+        } 
+        
         if (currentHealth <= 0) {
                 SceneManager.LoadScene(SceneManager.GetActiveScene().name);
             } 
-        }
+        
 
         if (other.CompareTag("Spike") || other.CompareTag("Enemy")) {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
@@ -146,6 +158,18 @@ public class Player : MonoBehaviour
                 Destroy(other.gameObject);
             }
         }
+
+        if (other.CompareTag("NPC")) {
+            SceneManager.LoadScene("Hub-Dorm");
+        }
     }
 
+
+    void OnControllerColliderHit(ControllerColliderHit hit) {
+        if (hit.collider.CompareTag("Door")) {
+            if (dataFragmentsCollected == 3) {
+                hit.collider.enabled = false;   
+            }
+        }
+    }
 }
