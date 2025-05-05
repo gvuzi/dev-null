@@ -51,6 +51,10 @@ public class PlayerInput : MonoBehaviour
             player.Shoot();
         }
 
+        if (Input.GetKeyDown(KeyCode.Escape)) {
+            Time.timeScale = 0f;
+        }
+
         movement.Normalize();
         player.Move(movement);
     }

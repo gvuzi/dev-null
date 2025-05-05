@@ -128,11 +128,9 @@ public class MainMenuHandler : MonoBehaviour
     public void setVSync(int index) {
         if (index == 0) {
             QualitySettings.vSyncCount = 0;
-            Debug.Log("disabled");
         }
         else {
             QualitySettings.vSyncCount = 1;
-            Debug.Log("enbled");
         }
     }
 

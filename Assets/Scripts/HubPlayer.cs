@@ -6,11 +6,18 @@ public class HubPlayer : MonoBehaviour
     public Transform cameraTransform;
     public float speed = 5f;
     CharacterController characterController;
+    public PauseMenuHandler PauseMenu;
+    private bool isPaused;
 
     void Awake() {
         characterController = GetComponent<CharacterController>();
     }
 
+    void Start() {
+        Time.timeScale = 1f;
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+    }
     
     void Update()
     {
@@ -37,6 +44,17 @@ public class HubPlayer : MonoBehaviour
 
         if(Input.GetKey(KeyCode.D)){
             movement += cameraRight;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape)) {
+            if (isPaused) {
+                PauseMenu.Back();
+                isPaused = false;
+            }
+            else {
+                PauseMenu.Pause();
+                isPaused = true;
+            }
         }
 
         movement.Normalize();
