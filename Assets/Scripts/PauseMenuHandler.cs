@@ -12,6 +12,7 @@ public class PauseMenuHandler : MonoBehaviour
     public GameObject postProcessingVolume;
     public AudioSource sfxSource;
     public AudioClip clickSound;
+    public HubPlayer player;
 
 
     public void Pause() {
@@ -21,6 +22,7 @@ public class PauseMenuHandler : MonoBehaviour
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
         Time.timeScale = 0f;
+        player.isPaused = true;
     }
 
     public void Back() {
@@ -30,6 +32,7 @@ public class PauseMenuHandler : MonoBehaviour
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
         Time.timeScale = 1f;
+        player.isPaused = false;
     }
 
     public void MainMenu() {
