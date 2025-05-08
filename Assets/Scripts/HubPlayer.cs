@@ -6,8 +6,10 @@ public class HubPlayer : MonoBehaviour
     public Transform cameraTransform;
     public float speed = 5f;
     CharacterController characterController;
-    public PauseMenuHandler PauseMenu;
+    public PauseMenuHandler pauseMenu;
+    public PromptHandler initialPrompt;
     public bool isPaused;
+
 
     [Header("Animation")]
     public PlayerAnimationChanger PlayerAnimationChanger;
@@ -52,16 +54,21 @@ public class HubPlayer : MonoBehaviour
             movement += cameraRight;
         }
 
+        if(Input.GetKeyDown(KeyCode.Return)) {
+            initialPrompt.playEnterSound();
+            initialPrompt.Hide();
+        }
+
         if (Input.GetKeyDown(KeyCode.Escape)) {
             if (isPaused) {
-                PauseMenu.Back();
-                isPaused = false;
+                pauseMenu.Back();
             }
             else {
-                PauseMenu.Pause();
-                isPaused = true;
+                pauseMenu.Pause();
             }
         }
+
+        
 
         movement.Normalize();
         Move(movement);
@@ -69,15 +76,14 @@ public class HubPlayer : MonoBehaviour
 
     public void Move(Vector3 direction) {
         characterController.Move(direction * speed * Time.deltaTime);
-        if (direction == Vector3.zero) {
+        if (direction == Vector3.zero || isPaused) {
             ChangeAnimationState(idleAnimationState);
             return;
         }
         
-        if (!isPaused) {
-            ChangeAnimationState(walkAnimationState);
-            transform.LookAt(transform.position + direction);
-        }
+        ChangeAnimationState(walkAnimationState);
+        transform.LookAt(transform.position + direction);
+        
     }
 
     void ChangeAnimationState(string newAnimationState) {
