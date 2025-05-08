@@ -17,7 +17,7 @@ public class Player : MonoBehaviour
 
     [Header("Bullets")]
     public GameObject bulletPrefab;
-    public float bulletSpeed = 45f;
+    public float bulletSpeed = 25f;
     public float shootTime = 1f;
     public float shootCooldown = 0.5f;
     private bool canShoot = true;
@@ -98,6 +98,10 @@ public class Player : MonoBehaviour
         }
 
         GameObject bullet = Instantiate(bulletPrefab, startPoint.position, Quaternion.identity);
+        Vector3 direction = (endPoint - startPoint.position).normalized;
+        Quaternion lookRotation = Quaternion.LookRotation(direction);
+        bullet.transform.rotation = lookRotation * Quaternion.Euler(90f, 270f, 0f);
+
         StartCoroutine(ShootRoutine(bullet, endPoint));
         StartCoroutine(ShootingCooldown());
     }
@@ -120,8 +124,7 @@ public class Player : MonoBehaviour
       
         bullet.transform.position = endPoint;
     
-            Destroy(bullet);
-        
+        Destroy(bullet);
     }
 
     public void HitSound() {
