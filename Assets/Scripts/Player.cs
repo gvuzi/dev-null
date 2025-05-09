@@ -1,14 +1,20 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using TMPro;
 
 public class Player : MonoBehaviour
 {
     public Camera firstPersonCamera;
     public LayerMask terrain;
     public Transform groundCheckTransform;
+    public GameObject errorCanvas;
+    public GameObject pickupPromptCanvas;
+    public GameObject missionEndHandler;
+    public TextMeshProUGUI pickupPrompt;
     public bool isPaused;
-
+    public bool missionComplete = false;
+    
     [Header("Movement")]
     CharacterController characterController;
     public float speed = 5f;
@@ -31,14 +37,15 @@ public class Player : MonoBehaviour
     public Healthbar healthbar;
 
     [Header("Mechanics")]
-    public float dataFragmentsCollected = 0;
+    public int dataFragmentsCollected = 0;
 
     [Header("Audio")]
     public AudioSource audioSource;
+    public AudioSource musicAudioSource;
     public AudioClip hitSound;
     public AudioClip damageSound;
     public AudioClip pickupSound;
-    public AudioSource musicAudioSource;
+    public AudioClip errorSound;
    
 
     void Awake() {
@@ -130,6 +137,21 @@ public class Player : MonoBehaviour
         Destroy(bullet);
     }
 
+    IEnumerator ErrorRoutine() {
+        audioSource.resource = errorSound;
+        audioSource.Play();
+        errorCanvas.SetActive(true); 
+        yield return new WaitForSeconds(2.5f);
+        errorCanvas.SetActive(false); 
+    }
+
+    IEnumerator PickupPromptRoutine() {
+        pickupPrompt.text = "code fragment " + dataFragmentsCollected.ToString() + "/3: corrupted source code recovered. debug log updated.";
+        pickupPromptCanvas.SetActive(true);
+        yield return new WaitForSeconds(3f);
+        pickupPromptCanvas.SetActive(false);
+    }
+
     public void HitSound() {
         // audioSource.resource = hitSound;
         audioSource.PlayOneShot(hitSound);
@@ -156,6 +178,7 @@ public class Player : MonoBehaviour
             audioSource.PlayOneShot(pickupSound);
             Destroy(other.gameObject);
             dataFragmentsCollected++;
+            StartCoroutine(PickupPromptRoutine());
             currentHealth = 100f;
             healthbar.UpdateHealth(maxHealth, currentHealth); 
         }
@@ -167,7 +190,8 @@ public class Player : MonoBehaviour
         }
 
         if (other.CompareTag("NPC")) {
-            SceneManager.LoadScene("Hub-Dorm");
+            missionComplete = true;
+            missionEndHandler.SetActive(true);
         }
     }
 
@@ -176,7 +200,11 @@ public class Player : MonoBehaviour
         if (hit.gameObject.CompareTag("Door"))
         {
             if (dataFragmentsCollected == 3) {
+                errorCanvas.SetActive(false);
                 Destroy(hit.gameObject);
+            }
+            else {
+                StartCoroutine(ErrorRoutine());
             }
         }
     }

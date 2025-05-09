@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Rotate : MonoBehaviour
 {
-    public float rotationSpeed = 50f;
+    public float rotationSpeed = 75f;
     void Update()
     {
         Vector3 rotation = Vector3.zero;

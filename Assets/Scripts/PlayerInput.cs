@@ -6,6 +6,7 @@ public class PlayerInput : MonoBehaviour
     public Transform cameraTransform;
     public PromptHandler initialPrompt;
     public PauseMenuHandler pauseMenu;
+    
 
     private bool promptGone = false;
 
@@ -26,6 +27,10 @@ public class PlayerInput : MonoBehaviour
 
         Vector3 cameraRight = cameraTransform.right;
         cameraRight.y = 0;
+
+        if (player.isPaused && !player.missionComplete) {
+            return;
+        }
 
         if (Input.GetKey(KeyCode.W))
         {
@@ -62,25 +67,28 @@ public class PlayerInput : MonoBehaviour
                 player.Shoot();
         }
 
-        if (Input.GetKeyDown(KeyCode.Escape)) {
-            Time.timeScale = 0f;
-        }
-
         if(Input.GetKeyDown(KeyCode.Return)) {
-            if (promptGone) {
+            if (promptGone && !player.missionComplete) {
                 return;
             } 
 
-            initialPrompt.playEnterSound();
-            initialPrompt.Hide();
-            promptGone = true;
+            if (player.missionComplete) {
+                initialPrompt.playEnterSound();
+                Debug.Log("did it");
+            }
+            else {
+                initialPrompt.playEnterSound();
+                initialPrompt.Hide();
+                promptGone = true;    
+            }
         }
 
         if (Input.GetKeyDown(KeyCode.Escape)) {
-            if (!promptGone) {
+            if (!promptGone || player.missionComplete) {
                 return;
             } 
 
+          
             if (player.isPaused) {
                 player.musicAudioSource.UnPause();
                 pauseMenu.Back();
@@ -89,6 +97,8 @@ public class PlayerInput : MonoBehaviour
                 player.musicAudioSource.Pause();
                 pauseMenu.Pause();
             }
+            
+
         }
 
         movement.Normalize();

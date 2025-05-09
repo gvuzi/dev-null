@@ -8,6 +8,7 @@ public class HubPlayer : MonoBehaviour
     CharacterController characterController;
     public PauseMenuHandler pauseMenu;
     public PromptHandler initialPrompt;
+    public AudioSource musicAudioSource;
     public bool isPaused = false;
     private bool promptGone = false;
 
@@ -37,7 +38,8 @@ public class HubPlayer : MonoBehaviour
 
         Vector3 cameraRight = cameraTransform.right;
         cameraRight.y = 0;
-
+        
+        
         if (Input.GetKey(KeyCode.W))
         {   
             movement += cameraForward;
@@ -71,9 +73,11 @@ public class HubPlayer : MonoBehaviour
             } 
             
             if (isPaused) {
+                musicAudioSource.UnPause();
                 pauseMenu.Back();
             }
             else {
+                musicAudioSource.Pause();
                 pauseMenu.Pause();
             }
         }
