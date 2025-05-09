@@ -53,6 +53,7 @@ public class PauseMenuHandler : MonoBehaviour
         }
         else {
             if (player != null)
+                player.musicAudioSource.UnPause();
                 player.isPaused = false;
         } 
     }

@@ -38,6 +38,7 @@ public class Player : MonoBehaviour
     public AudioClip hitSound;
     public AudioClip damageSound;
     public AudioClip pickupSound;
+    public AudioSource musicAudioSource;
    
 
     void Awake() {
@@ -167,6 +168,16 @@ public class Player : MonoBehaviour
 
         if (other.CompareTag("NPC")) {
             SceneManager.LoadScene("Hub-Dorm");
+        }
+    }
+
+
+    void OnControllerColliderHit(ControllerColliderHit hit) {
+        if (hit.gameObject.CompareTag("Door"))
+        {
+            if (dataFragmentsCollected == 3) {
+                Destroy(hit.gameObject);
+            }
         }
     }
 

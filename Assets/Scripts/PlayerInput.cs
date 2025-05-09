@@ -6,7 +6,9 @@ public class PlayerInput : MonoBehaviour
     public Transform cameraTransform;
     public PromptHandler initialPrompt;
     public PauseMenuHandler pauseMenu;
+
     private bool promptGone = false;
+
 
     void Start()
     {
@@ -78,11 +80,13 @@ public class PlayerInput : MonoBehaviour
             if (!promptGone) {
                 return;
             } 
-            
+
             if (player.isPaused) {
+                player.musicAudioSource.UnPause();
                 pauseMenu.Back();
             }
             else {
+                player.musicAudioSource.Pause();
                 pauseMenu.Pause();
             }
         }

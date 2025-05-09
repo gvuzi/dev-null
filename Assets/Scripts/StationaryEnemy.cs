@@ -10,9 +10,9 @@ public class StationaryEnemy : MonoBehaviour
 
     [Header("Bullets")]
     public GameObject bulletPrefab;
-    public float bulletSpeed = 45f;
+    public float bulletSpeed = 20f;
     public float shootTime = 1f;
-    public float shootCooldown = 2f;
+    public float shootCooldown = 1f;
     public Transform startPoint;
     private List<GameObject> bullets = new List<GameObject>();
     
