@@ -8,7 +8,8 @@ public class HubPlayer : MonoBehaviour
     CharacterController characterController;
     public PauseMenuHandler pauseMenu;
     public PromptHandler initialPrompt;
-    public bool isPaused;
+    public bool isPaused = false;
+    private bool promptGone = false;
 
 
     [Header("Animation")]
@@ -55,11 +56,20 @@ public class HubPlayer : MonoBehaviour
         }
 
         if(Input.GetKeyDown(KeyCode.Return)) {
+            if (promptGone) {
+                return;
+            } 
+
             initialPrompt.playEnterSound();
             initialPrompt.Hide();
+            promptGone = true;
         }
 
         if (Input.GetKeyDown(KeyCode.Escape)) {
+            if (!promptGone) {
+                return;
+            } 
+            
             if (isPaused) {
                 pauseMenu.Back();
             }

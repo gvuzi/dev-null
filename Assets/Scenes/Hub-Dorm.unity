@@ -2635,7 +2635,8 @@ MonoBehaviour:
   postProcessingVolume: {fileID: 1786606660}
   sfxSource: {fileID: 685132486}
   clickSound: {fileID: 8300000, guid: c0c918c6d60e641429af2955a10d42c7, type: 3}
-  player: {fileID: 474552525}
+  hubPlayer: {fileID: 474552525}
+  player: {fileID: 0}
 --- !u!4 &685132485
 Transform:
   m_ObjectHideFlags: 0
@@ -6113,8 +6114,9 @@ MonoBehaviour:
   - {fileID: 83798541}
   sfxSource: {fileID: 2038007499}
   enterSound: {fileID: 8300000, guid: a702e0bf666762a4384867802dbeac52, type: 3}
-  player: {fileID: 474552525}
   mainScene: {fileID: 2074979248}
+  hubPlayer: {fileID: 474552525}
+  player: {fileID: 0}
 --- !u!4 &2038007498
 Transform:
   m_ObjectHideFlags: 0

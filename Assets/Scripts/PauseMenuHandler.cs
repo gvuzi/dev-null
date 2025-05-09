@@ -12,8 +12,13 @@ public class PauseMenuHandler : MonoBehaviour
     public GameObject postProcessingVolume;
     public AudioSource sfxSource;
     public AudioClip clickSound;
-    public HubPlayer player;
+    public HubPlayer hubPlayer;
+    public Player player;
+    private string currentScene;
 
+    void Start() {
+        currentScene = SceneManager.GetActiveScene().name;
+    }
 
     public void Pause() {
         playClickSound();
@@ -22,7 +27,16 @@ public class PauseMenuHandler : MonoBehaviour
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
         Time.timeScale = 0f;
-        player.isPaused = true;
+
+        if (currentScene == "Hub-Dorm") {
+            if (hubPlayer != null)
+                hubPlayer.isPaused = true;
+        }
+        else {
+            if (player != null)
+                player.isPaused = true;
+        } 
+
     }
 
     public void Back() {
@@ -32,7 +46,15 @@ public class PauseMenuHandler : MonoBehaviour
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
         Time.timeScale = 1f;
-        player.isPaused = false;
+
+        if (currentScene == "Hub-Dorm") {
+            if (hubPlayer != null)
+                hubPlayer.isPaused = false;
+        }
+        else {
+            if (player != null)
+                player.isPaused = false;
+        } 
     }
 
     public void MainMenu() {
@@ -57,7 +79,6 @@ public class PauseMenuHandler : MonoBehaviour
             SceneManager.LoadScene(scene);
         }
 
-        Application.Quit();
         button.interactable = true; // set for demo purposes, not applicable in-game
     }
 }

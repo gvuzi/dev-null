@@ -7,6 +7,7 @@ public class Player : MonoBehaviour
     public Camera firstPersonCamera;
     public LayerMask terrain;
     public Transform groundCheckTransform;
+    public bool isPaused;
 
     [Header("Movement")]
     CharacterController characterController;
@@ -36,6 +37,7 @@ public class Player : MonoBehaviour
     public AudioSource audioSource;
     public AudioClip hitSound;
     public AudioClip damageSound;
+    public AudioClip pickupSound;
    
 
     void Awake() {
@@ -128,14 +130,14 @@ public class Player : MonoBehaviour
     }
 
     public void HitSound() {
-        audioSource.resource = hitSound;
-        audioSource.Play();
+        // audioSource.resource = hitSound;
+        audioSource.PlayOneShot(hitSound);
     }
 
     void OnTriggerEnter(Collider other) {
         if(other.CompareTag("EnemyBullet")) {
-            audioSource.resource = damageSound;
-            audioSource.Play();
+            // audioSource.resource = damageSound;
+            audioSource.PlayOneShot(damageSound);
             currentHealth -= damage;
             healthbar.UpdateHealth(maxHealth, currentHealth); 
         } 
@@ -150,6 +152,7 @@ public class Player : MonoBehaviour
         }
 
         if (other.CompareTag("DataFragment")) {
+            audioSource.PlayOneShot(pickupSound);
             Destroy(other.gameObject);
             dataFragmentsCollected++;
             currentHealth = 100f;
@@ -167,12 +170,4 @@ public class Player : MonoBehaviour
         }
     }
 
-
-    void OnControllerColliderHit(ControllerColliderHit hit) {
-        if (hit.collider.CompareTag("Door")) {
-            if (dataFragmentsCollected == 3) {
-                hit.collider.enabled = false;   
-            }
-        }
-    }
 }

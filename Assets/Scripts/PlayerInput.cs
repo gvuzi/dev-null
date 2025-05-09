@@ -4,6 +4,9 @@ public class PlayerInput : MonoBehaviour
 {
     public Player player;
     public Transform cameraTransform;
+    public PromptHandler initialPrompt;
+    public PauseMenuHandler pauseMenu;
+    private bool promptGone = false;
 
     void Start()
     {
@@ -44,15 +47,44 @@ public class PlayerInput : MonoBehaviour
         }
 
         if(Input.GetKeyDown(KeyCode.Mouse0)) {
-            player.Shoot();
+            if (player.isPaused) {
+                return;
+            }
+                player.Shoot();
         }
 
         if(Input.GetKey(KeyCode.Mouse0)) {
-            player.Shoot();
+            if (player.isPaused) {
+                return;
+            }
+                player.Shoot();
         }
 
         if (Input.GetKeyDown(KeyCode.Escape)) {
             Time.timeScale = 0f;
+        }
+
+        if(Input.GetKeyDown(KeyCode.Return)) {
+            if (promptGone) {
+                return;
+            } 
+
+            initialPrompt.playEnterSound();
+            initialPrompt.Hide();
+            promptGone = true;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape)) {
+            if (!promptGone) {
+                return;
+            } 
+            
+            if (player.isPaused) {
+                pauseMenu.Back();
+            }
+            else {
+                pauseMenu.Pause();
+            }
         }
 
         movement.Normalize();

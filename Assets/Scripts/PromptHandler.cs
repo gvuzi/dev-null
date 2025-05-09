@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections;
@@ -10,16 +11,33 @@ public class PromptHandler : MonoBehaviour
     public TextMeshProUGUI[] outputText;
     public AudioSource sfxSource;
     public AudioClip enterSound;
-    public HubPlayer player;
     public GameObject mainScene;
+    public HubPlayer hubPlayer;
+    public Player player;
 
+
+    private string currentScene;
     
-
+    void Awake() {
+        currentScene = SceneManager.GetActiveScene().name;
+    }
 
     void Start() {
-        player.isPaused = true;
-        StartCoroutine(InitializePrompt());
-        player.isPaused = false;
+        if (currentScene == "Hub-Dorm") {
+            if (hubPlayer != null) {
+                hubPlayer.isPaused = true;
+                StartCoroutine(InitializePrompt());
+                hubPlayer.isPaused = false;
+            }
+        }
+        else {
+            if (player != null) {
+                player.isPaused = true;
+                Debug.Log("Start method for player called.");
+                StartCoroutine(InitializePrompt());
+                player.isPaused = false;
+            }          
+        }
     }
 
     IEnumerator InitializePrompt() {
