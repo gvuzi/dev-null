@@ -20,6 +20,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Hub-Startup.unity
     guid: d582a3f96b5a6f94e97000c98bc888ba
+  - enabled: 1
+    path: Assets/Scenes/Second-Mission.unity
+    guid: e0d4d5983852dcd40b0d90ca86d24f23
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0
