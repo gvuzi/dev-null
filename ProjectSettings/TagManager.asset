@@ -12,6 +12,8 @@ TagManager:
   - Enemy
   - Door
   - NPC
+  - SecurityProtocolLazer
+  - GuardianBullet
   layers:
   - Default
   - TransparentFX

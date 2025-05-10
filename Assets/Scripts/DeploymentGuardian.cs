@@ -3,10 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 
 
-public class StationaryEnemy : MonoBehaviour
+public class DeploymentGuardian : MonoBehaviour
 {
     public Player player;
     public Transform enemy;
+    public Transform[] spawnPoints;
+    public GameObject enemyPrefab;
+    public AudioSource sfxSource;
+    public AudioClip deathSound;
 
     [Header("Bullets")]
     public GameObject bulletPrefab;
@@ -15,6 +19,7 @@ public class StationaryEnemy : MonoBehaviour
     public float shootCooldown = 1f;
     public Transform startPoint;
     private List<GameObject> bullets = new List<GameObject>();
+    private float health = 100f;
     
 
     // velocity variables
@@ -93,8 +98,8 @@ public class StationaryEnemy : MonoBehaviour
             yield return null;
         }
 
-        bullet.transform.position = endPoint;
         Destroy(bullet);
+        yield return null;
     }
 
     void DestroyBullets() {
@@ -107,8 +112,21 @@ public class StationaryEnemy : MonoBehaviour
     void OnTriggerEnter(Collider other) {
         if(other.CompareTag("Bullet")) {
             player.HitSound();
-            Destroy(this.gameObject);
-            DestroyBullets();
+            health -= 25f;
+            Debug.Log("enemy health is " + health);
+
+            if (health <= 0f) {
+                sfxSource.resource = deathSound;
+                sfxSource.Play();
+                player.missionComplete = true;
+                Destroy(this.gameObject);
+                DestroyBullets();
+            }
+
+            for (int i = 0; i < spawnPoints.Length; i++) {
+                GameObject enemy = Instantiate(enemyPrefab, spawnPoints[i].position, spawnPoints[i].rotation);
+                enemy.GetComponent<MovingEnemy>().player = player;
+            }
         }
     }
 

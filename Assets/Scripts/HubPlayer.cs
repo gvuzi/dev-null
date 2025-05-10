@@ -110,7 +110,7 @@ public class HubPlayer : MonoBehaviour
         if(other.CompareTag("Chair")) {
             switch (currentScene) {
                 case "Hub-Startup":
-                    Debug.Log("loading second mission"); break;
+                    SceneManager.LoadScene("Second-Mission"); break;
                 default:
                     SceneManager.LoadScene("First-Mission"); break;
             }

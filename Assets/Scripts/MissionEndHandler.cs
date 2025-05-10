@@ -8,16 +8,20 @@ public class MissionEndHandler : MonoBehaviour
 {
     public Canvas initialPrompt;
     public Timer timer;
-    
     public TextMeshProUGUI[] outputText;
     public TextMeshProUGUI initialText;
     public TextMeshProUGUI time;
     public TextMeshProUGUI continueText;
     public AudioClip endMusic;
-   
     public Player player;
 
+    private Animator[] animators;
+
     void Start() {
+        animators = FindObjectsOfType<Animator>();
+        for (int i = 0; i < animators.Length; i++) {
+            animators[i].enabled = false;
+        }
         player.isPaused = true;
         player.musicAudioSource.Pause();
         StartCoroutine(EndSequence());

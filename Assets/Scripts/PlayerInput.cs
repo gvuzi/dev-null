@@ -73,6 +73,10 @@ public class PlayerInput : MonoBehaviour
                 return;
             } 
 
+            if (SceneManager.GetActiveScene().name == "Second-Mission" && player.missionComplete) { // temp
+                return;
+            }
+
             if (player.missionComplete) {
                 initialPrompt.playEnterSound();
                 SceneManager.LoadScene("Hub-Startup");

@@ -33,7 +33,6 @@ public class Player : MonoBehaviour
     [Header("Health")]
     private float maxHealth = 100f;
     private float currentHealth;
-    private float damage = 25f;
     public Healthbar healthbar;
 
     [Header("Mechanics")]
@@ -46,6 +45,8 @@ public class Player : MonoBehaviour
     public AudioClip damageSound;
     public AudioClip pickupSound;
     public AudioClip errorSound;
+
+    private Scene currentScene;
    
 
     void Awake() {
@@ -54,6 +55,7 @@ public class Player : MonoBehaviour
 
     void Start()
     {
+        currentScene = SceneManager.GetActiveScene();
         currentHealth = maxHealth;
         healthbar.UpdateHealth(maxHealth, currentHealth);
     }
@@ -153,21 +155,26 @@ public class Player : MonoBehaviour
     }
 
     public void HitSound() {
-        // audioSource.resource = hitSound;
         audioSource.PlayOneShot(hitSound);
     }
 
     void OnTriggerEnter(Collider other) {
-        if(other.CompareTag("EnemyBullet")) {
-            // audioSource.resource = damageSound;
+        if (other.CompareTag("EnemyBullet")) {
             audioSource.PlayOneShot(damageSound);
-            currentHealth -= damage;
+            currentHealth -= 25f;
             healthbar.UpdateHealth(maxHealth, currentHealth); 
         } 
         
         if (currentHealth <= 0) {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         } 
+
+        if (other.CompareTag("SecurityProtocolLazer") || other.CompareTag("GuardianBullet")) {
+            audioSource.PlayOneShot(damageSound);
+            currentHealth = 0;
+            healthbar.UpdateHealth(maxHealth, currentHealth); 
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
         
 
         if (other.CompareTag("Spike") || other.CompareTag("Enemy")) {
@@ -199,6 +206,10 @@ public class Player : MonoBehaviour
     void OnControllerColliderHit(ControllerColliderHit hit) {
         if (hit.gameObject.CompareTag("Door"))
         {
+            if (missionComplete) {
+                missionEndHandler.SetActive(true);
+            }
+
             if (dataFragmentsCollected == 3) {
                 errorCanvas.SetActive(false);
                 Destroy(hit.gameObject);
