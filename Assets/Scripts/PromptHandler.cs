@@ -23,7 +23,7 @@ public class PromptHandler : MonoBehaviour
     }
 
     void Start() {
-        if (currentScene == "Hub-Dorm") {
+        if (currentScene == "Hub-Dorm" || currentScene == "Hub-Startup") {
             if (hubPlayer != null) {
                 hubPlayer.isPaused = true;
                 StartCoroutine(InitializePrompt());
@@ -33,7 +33,6 @@ public class PromptHandler : MonoBehaviour
         else {
             if (player != null) {
                 player.isPaused = true;
-                Debug.Log("Start method for player called.");
                 StartCoroutine(InitializePrompt());
                 player.isPaused = false;
             }          

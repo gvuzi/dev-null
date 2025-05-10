@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerInput : MonoBehaviour
 {
@@ -74,7 +75,7 @@ public class PlayerInput : MonoBehaviour
 
             if (player.missionComplete) {
                 initialPrompt.playEnterSound();
-                Debug.Log("did it");
+                SceneManager.LoadScene("Hub-Startup");
             }
             else {
                 initialPrompt.playEnterSound();

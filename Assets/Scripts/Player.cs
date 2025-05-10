@@ -166,8 +166,8 @@ public class Player : MonoBehaviour
         } 
         
         if (currentHealth <= 0) {
-                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-            } 
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        } 
         
 
         if (other.CompareTag("Spike") || other.CompareTag("Enemy")) {

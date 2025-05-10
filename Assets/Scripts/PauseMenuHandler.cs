@@ -28,7 +28,7 @@ public class PauseMenuHandler : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         Time.timeScale = 0f;
 
-        if (currentScene == "Hub-Dorm") {
+        if (currentScene == "Hub-Dorm" || currentScene == "Hub-Startup") {
             if (hubPlayer != null)
                 hubPlayer.isPaused = true;
         }
@@ -47,7 +47,7 @@ public class PauseMenuHandler : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Time.timeScale = 1f;
 
-        if (currentScene == "Hub-Dorm") {
+        if (currentScene == "Hub-Dorm" || currentScene == "Hub-Startup") {
             if (hubPlayer != null)
                 hubPlayer.isPaused = false;
         }

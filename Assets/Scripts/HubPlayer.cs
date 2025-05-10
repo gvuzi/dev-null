@@ -11,6 +11,7 @@ public class HubPlayer : MonoBehaviour
     public AudioSource musicAudioSource;
     public bool isPaused = false;
     private bool promptGone = false;
+    private string currentScene;
 
 
     [Header("Animation")]
@@ -23,6 +24,7 @@ public class HubPlayer : MonoBehaviour
     }
 
     void Start() {
+        currentScene = SceneManager.GetActiveScene().name;
         ChangeAnimationState(idleAnimationState);
         Time.timeScale = 1f;
         Cursor.lockState = CursorLockMode.Locked;
@@ -106,7 +108,12 @@ public class HubPlayer : MonoBehaviour
 
     void OnTriggerEnter(Collider other) {
         if(other.CompareTag("Chair")) {
-            SceneManager.LoadScene("First-Mission");
+            switch (currentScene) {
+                case "Hub-Startup":
+                    Debug.Log("loading second mission"); break;
+                default:
+                    SceneManager.LoadScene("First-Mission"); break;
+            }
         }
     }
 }
