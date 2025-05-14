@@ -151,8 +151,10 @@ public class MainMenuHandler : MonoBehaviour
         if (scene != null) {
             SceneManager.LoadScene(scene);
         }
-
-        Application.Quit();
+        else {
+            Application.Quit();
+        }
+        
         button.interactable = true; // set for demo purposes, not applicable in-game
     }
 
